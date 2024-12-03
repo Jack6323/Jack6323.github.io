@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Task Calendar</h1>
+
+<div id="calendar"></div>
+
+<!-- Include FullCalendar library -->
+<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            events: [
+                {% for task in tasks %}
+                {
+                    title: '{{ task.title }}',
+                    start: '{{ task.due_date }}',
+                    url: '/tasks',
+                    backgroundColor: '{{ '#90EE90' if task.category == 'Work' else '#3383ff' }}',
+                    borderColor: '{{ '#90EE90' if task.category == 'Work' else '#3383ff' }}'
+                },
+                {% endfor %}
+            ],
+            dayCellDidMount: function(info) {
+                const today = new Date();
+                const cellDate = new Date(info.date);
+
+                // Check if the date is in the past
+                if (cellDate < today.setHours(0, 0, 0, 0)) {
+                    info.el.style.backgroundColor = '#f0f0f0'; // Light gray background for past days
+                    info.el.style.pointerEvents = 'none'; // Disable clicking on past dates
+                }
+            }
+        });
+        calendar.render();
+    });
+</script>
+{% endblock %}

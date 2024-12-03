@@ -1,0 +1,25 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+<h1>Notes</h1>
+
+<!-- Form to submit a new note -->
+<form method="POST" action="/notes"> <!-- POST request to save the new note -->
+    <input type="text" name="note_title" placeholder="Note Title" required> <!-- Input field for the note title -->
+    <textarea name="content" placeholder="Write your note here..." required></textarea> <!-- Textarea for the note content -->
+    <button type="submit">Save Note</button> <!-- Button to submit the form -->
+</form>
+
+<!-- Display existing notes -->
+<ul> <!-- Unordered list to display notes -->
+    {% for note in notes %} <!-- Loop through each existing note -->
+    <li> <!-- List item for each note -->
+        <h2>{{ note.note_title }}</h2> <!-- Display the title of the note -->
+        <p>{{ note.content }}</p> <!-- Display the content of the note -->
+        <form method="POST" action="/delete_note/{{ note.id }}" style="display: inline;"> <!-- Form to delete the note -->
+            <button type="submit">Delete</button> <!-- Button to submit the delete request -->
+        </form>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}
