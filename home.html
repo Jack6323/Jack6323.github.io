@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Tasks for Today</h1>
+
+<ul>
+    {% for task in tasks_today %}
+    <li class="{{ 'work' if task.category == 'Work' else 'personal' }}">
+        {{ task.title }} (Due: {{ task.due_date }})
+    </li>
+    {% endfor %}
+</ul>
+
+<h2>Upcoming Tasks</h2>
+<table class="calendar">
+    <tr>
+        <th>Sun</th>
+        <th>Mon</th>
+        <th>Tue</th>
+        <th>Wed</th>
+        <th>Thu</th>
+        <th>Fri</th>
+        <th>Sat</th>
+    </tr>
+    <tr>
+        {% for day in week_tasks.keys() %}
+        <td>
+            <strong>{{ day.strftime('%d-%m-%Y') }}</strong>
+            <ul>
+                {% if week_tasks[day] %}
+                    {% for task in week_tasks[day] %}
+                    <li class="{{ 'work' if task.category == 'Work' else 'personal' }}">
+                        {{ task.title }} (Due: {{ task.due_date }})
+                    </li>
+                    {% endfor %}
+                {% else %}
+                    <li>No Tasks</li>
+                {% endif %}
+            </ul>
+        </td>
+        {% endfor %}
+    </tr>
+</table>
+{% endblock %}
